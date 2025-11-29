@@ -6,7 +6,7 @@ import NoteDetailPage from "./pages/NoteDetailPage";
 
 const App = () => {
   return (
-    <div data-theme="valentine">
+    <div data-theme="coffee">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/create" element={<CreatePage />} />

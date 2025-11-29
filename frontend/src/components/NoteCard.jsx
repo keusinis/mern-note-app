@@ -20,7 +20,7 @@ function NoteCard({ note, setNotes }) {
   return (
     <Link
       to={`/note/${note._id}`}
-      className="card bg-base-100 hover:shadow-md transition-all duration-500
+      className="card bg-neutral hover:shadow-xl transition-all duration-500
             border-t-2 border-l-2 border-primary"
     >
       <div className="card-body ">

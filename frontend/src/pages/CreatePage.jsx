@@ -47,7 +47,7 @@ const CreatePage = () => {
             Back to Notes
           </Link>
 
-          <div className="card bg-base-100">
+          <div className="card bg-neutral">
             <div className="card-body">
               <h2 className="card-title text-2xl mb-4">Create New Note</h2>
               <form onSubmit={handleSubmit}>
@@ -58,7 +58,7 @@ const CreatePage = () => {
                   <input
                     type="text"
                     placeholder="Note Title"
-                    className="input input-primary"
+                    className="input input-primary bg-base-200"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
@@ -70,7 +70,7 @@ const CreatePage = () => {
                   </label>
                   <textarea
                     placeholder="Your Note..."
-                    className="textarea textarea-primary h-32"
+                    className="textarea textarea-primary h-32 bg-base-200"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                   />

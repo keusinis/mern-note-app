@@ -83,7 +83,7 @@ const NoteDetailPage = () => {
               Delete Note
             </button>
           </div>
-          <div className="card bg-base-100">
+          <div className="card bg-neutral">
             <div className="card-body">
               <div className="form-control mb-4">
                 <label className="label">
@@ -92,7 +92,7 @@ const NoteDetailPage = () => {
                 <input
                   type="text"
                   placeholder="Note title"
-                  className="input input-bordered"
+                  className="input input-primary bg-base-200"
                   value={note.title}
                   onChange={(e) => setNote({ ...note, title: e.target.value })}
                 />
@@ -104,7 +104,7 @@ const NoteDetailPage = () => {
                 </label>
                 <textarea
                   placeholder="Write your note here..."
-                  className="textarea textarea-bordered h-32"
+                  className="textarea textarea-primary h-32 bg-base-200"
                   value={note.content}
                   onChange={(e) =>
                     setNote({ ...note, content: e.target.value })
