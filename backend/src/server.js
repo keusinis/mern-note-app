@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 
 import notesRoutes from "./routes/notesRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import { connectDB } from "./config/db.js";
 import { rateLimiter } from "./middleware/rateLimiter.js";
 
@@ -24,6 +25,7 @@ if (process.env.NODE_ENV !== "production") {
 app.use(express.json()); // parse JSON bodies: req.body
 app.use(rateLimiter); // upstash redis ratelimit
 app.use("/api/notes", notesRoutes);
+app.use("/api/user", userRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
