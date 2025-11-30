@@ -3,11 +3,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import api from "../lib/axios";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const { user } = useAuthContext();
 
   const navigate = useNavigate();
 
@@ -20,10 +22,18 @@ const CreatePage = () => {
 
     setLoading(true);
     try {
-      await api.post("/notes", {
-        title,
-        content,
-      });
+      await api.post(
+        "/notes",
+        {
+          title,
+          content,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       toast.success("Note Created");
       navigate("/");
     } catch (error) {
@@ -31,6 +41,7 @@ const CreatePage = () => {
       if (error.response && error.response.status === 429) {
         toast.error("Slow down, you are creating notes too fast");
       } else {
+        console.log({error})
         toast.error("failed to create note");
       }
     } finally {

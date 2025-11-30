@@ -3,36 +3,74 @@ import { useEffect, useState } from "react";
 import api from "../lib/axios";
 import toast from "react-hot-toast";
 import { ArrowLeftIcon, LoaderIcon, Trash2Icon } from "lucide-react";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const NoteDetailPage = () => {
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const { user, isLoading: authLoading } = useAuthContext(); // Get authLoading
 
   const navigate = useNavigate();
-
   const { id } = useParams();
 
   useEffect(() => {
+    // Wait for auth check to complete
+    if (authLoading) return;
+
+    // Only redirect if auth check is complete and no user
+    if (!user) {
+      navigate("/");
+      return;
+    }
+
     const fetchNote = async () => {
       try {
-        const res = await api.get(`/notes/${id}`);
+        const res = await api.get(`/notes/${id}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
         setNote(res.data);
       } catch (error) {
         console.log("Error fetching note", error);
-        toast.error("Error loading note");
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          toast.error("Unauthorized to view this note");
+          navigate("/");
+        } else if (error.response?.status === 404) {
+          toast.error("Note not found");
+          navigate("/");
+        } else {
+          toast.error("Error loading note");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchNote();
-  }, [id]);
+  }, [id, user, navigate, authLoading]);
+
+  // Show loading while checking auth OR fetching note
+  if (authLoading || (user && loading)) {
+    return (
+      <div className="min-h-screen bg-base-200 flex items-center justify-center">
+        <LoaderIcon className="animate-spin size-10 text-primary" />
+      </div>
+    );
+  }
+
+  // Don't render anything if no user after auth check
+  if (!user) {
+    return null;
+  }
 
   const handleDelete = async () => {
     if (!window.confirm("Delete the Note?")) return;
     try {
-      await api.delete(`/notes/${id}`);
+      await api.delete(`/notes/${id}`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
       toast.success("Note deleted");
       navigate("/");
     } catch (error) {
@@ -40,15 +78,18 @@ const NoteDetailPage = () => {
       toast.error("Failed to delete Note");
     }
   };
+
   const handleSave = async () => {
-    if (!note.title.trim() || !note.content.trim()) {
+    if (!note?.title?.trim() || !note?.content?.trim()) {
       toast.error("All fields are required");
       return;
     }
 
     setSaving(true);
     try {
-      await api.put(`/notes/${id}`, note);
+      await api.put(`/notes/${id}`, note, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
       toast.success("Note saved");
       navigate("/");
     } catch (error) {
@@ -58,13 +99,6 @@ const NoteDetailPage = () => {
       setSaving(false);
     }
   };
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-base-200 flex items-center justify-center">
-        <LoaderIcon className="animate-spin size-10 text-primary" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-base-200">
@@ -93,7 +127,7 @@ const NoteDetailPage = () => {
                   type="text"
                   placeholder="Note title"
                   className="input input-primary bg-base-200"
-                  value={note.title}
+                  value={note?.title || ""}
                   onChange={(e) => setNote({ ...note, title: e.target.value })}
                 />
               </div>
@@ -105,7 +139,7 @@ const NoteDetailPage = () => {
                 <textarea
                   placeholder="Write your note here..."
                   className="textarea textarea-primary h-32 bg-base-200"
-                  value={note.content}
+                  value={note?.content || ""}
                   onChange={(e) =>
                     setNote({ ...note, content: e.target.value })
                   }

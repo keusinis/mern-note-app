@@ -7,6 +7,7 @@ import notesRoutes from "./routes/notesRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import { connectDB } from "./config/db.js";
 import { rateLimiter } from "./middleware/rateLimiter.js";
+import { emailFormatter } from "./middleware/emailFormatter.js";
 
 dotenv.config();
 
@@ -20,10 +21,11 @@ if (process.env.NODE_ENV !== "production") {
     cors({
       origin: "http://localhost:5173",
     })
-  ); // allows to access api from frontend (only in development)
+  );
 }
 app.use(express.json()); // parse JSON bodies: req.body
 app.use(rateLimiter); // upstash redis ratelimit
+app.use(emailFormatter);
 app.use("/api/notes", notesRoutes);
 app.use("/api/user", userRoutes);
 

@@ -1,4 +1,5 @@
 import express from "express";
+import requireAuth from "../middleware/requireAuth.js";
 import {
   createNote,
   deleteNote,
@@ -6,13 +7,19 @@ import {
   updateNote,
   getNote,
 } from "../controllers/notesController.js";
+import {
+  writeRateLimiter,
+  readRateLimiter,
+} from "../middleware/rateLimiter.js";
 
 const router = express.Router();
 
-router.get("/", getAllNotes);
-router.get("/:id", getNote);
-router.post("/", createNote);
-router.put("/:id", updateNote);
-router.delete("/:id", deleteNote);
+router.use(requireAuth);
+
+router.get("/", readRateLimiter, getAllNotes);
+router.get("/:id", readRateLimiter, getNote);
+router.post("/", writeRateLimiter, createNote);
+router.put("/:id", writeRateLimiter, updateNote);
+router.delete("/:id", writeRateLimiter, deleteNote);
 
 export default router;
