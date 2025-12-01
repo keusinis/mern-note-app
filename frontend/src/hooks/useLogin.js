@@ -20,8 +20,12 @@ export const useLogin = () => {
 
       return data;
     } catch (err) {
-      if (err.response) {
-        setError(`${err.response.data?.error}${err.response.data?.remainingAttempts}` || "Signup failed");
+      if (err.response.status === 429 || err.response.data?.remainingAttempts === 0) {
+        setError(`Too many attempts, try againg later`);
+      } else if (err.response) {
+        setError(
+          `${err.response.data?.error}. Remaining attempts: ${err.response.data?.remainingAttempts}`
+        );
       } else {
         setError("Could not reach the server");
       }

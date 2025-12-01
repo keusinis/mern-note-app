@@ -25,7 +25,6 @@ function NoteCard({ note, setNotes }) {
       
       if (error.response?.status === 401 || error.response?.status === 403) {
         toast.error("Unauthorized to delete this note");
-        // Optionally remove the note from local state if unauthorized
         setNotes((prev) => prev.filter((note) => note._id !== id));
       } else if (error.response?.status === 404) {
         toast.error("Note not found");

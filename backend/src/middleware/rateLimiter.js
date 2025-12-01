@@ -4,7 +4,6 @@ import {
   signupRateLimit,
   writeRateLimit,
   readRateLimit,
-  globalRateLimit,
 } from "../config/upstash.js";
 
 export const rateLimiter = async (req, res, next) => {
@@ -37,10 +36,11 @@ export const loginRateLimiter = async (req, res, next) => {
       limit: result.limit,
       reset: result.reset,
     };
+    console.log(result);
 
     if (!result.success)
       return res.status(429).json({
-        message: "Too many login attempts, please try again later",
+        error: "Too many login attempts, please try again later",
         retryAfter: Math.ceil((result.reset - Date.now()) / 1000) + " seconds",
       });
 

@@ -10,17 +10,17 @@ export const rateLimit = new Ratelimit({
   analytics: true,
 });
 
-// strict for login req: 5 per 1 minute
+// strict for login req: 5 per 10 minutes
 export const loginRateLimit = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(5, "1 m"),
+  limiter: Ratelimit.slidingWindow(5, "10 m"),
   analytics: true,
 });
 
 // strict for account creation: 5 per 10 minutes
 export const signupRateLimit = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(5, "10 m"),
+  limiter: Ratelimit.slidingWindow(6, "10 m"),
   analytics: true,
 });
 
@@ -38,7 +38,7 @@ export const readRateLimit = new Ratelimit({
   analytics: true,
 });
 
-// unused, for api's
+// unused, to be added
 export const globalRateLimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(1000, "10 m"),

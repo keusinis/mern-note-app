@@ -20,8 +20,12 @@ export const useSignup = () => {
 
       return data;
     } catch (err) {
-      if (err.response) {
-        setError(err.response.data?.error || "Signup failed");
+      if (err.response.status === 429 || err.response.data?.remainingAttempts === 0) {
+        setError(`Too many attempts, try again later`);
+      } else if (err.response) {
+        setError(
+          `${err.response.data?.error}`
+        );
       } else {
         setError("Could not reach the server");
       }

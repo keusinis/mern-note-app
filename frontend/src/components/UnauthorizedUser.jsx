@@ -1,5 +1,5 @@
-import { UserIcon, SparklesIcon, NotebookIcon } from "lucide-react";
-import { LogIn, LogOut, PlusIcon, SquarePen } from "lucide-react";
+import { NotebookIcon } from "lucide-react";
+import { LogIn, SquarePen } from "lucide-react";
 import { Link } from "react-router";
 
 const UnauthorizedUser = () => {

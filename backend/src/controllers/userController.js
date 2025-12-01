@@ -7,7 +7,6 @@ const createToken = (_id) => {
 
 // login user
 export async function loginUser(req, res) {
-  console.log(req.body);
   const { email, password } = req.body;
   try {
     const user = await User.login(email, password);
@@ -23,7 +22,7 @@ export async function loginUser(req, res) {
 
     res.status(400).json({
       error: error.message, 
-      remainingAttempts: remainingAttempts - 1});
+      remainingAttempts: remainingAttempts});
   }
 }
 

@@ -1,8 +1,7 @@
 import { Link } from "react-router";
-import { LogIn, LogOut, PlusIcon, SquarePen } from "lucide-react";
+import { LogOut, PlusIcon, SquarePen } from "lucide-react";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
-// import { toast } from "react-hot-toast";
 
 const Navbar = ({ noteAmount }) => {
   const { logout } = useLogout();
@@ -41,24 +40,6 @@ const Navbar = ({ noteAmount }) => {
                 </div>
               </>
             )}
-            {/* {!user && false && (
-              <>
-                <Link
-                  to={"/login"}
-                  className="btn btn-ghost btn-sm"
-                >
-                  <LogIn className="size-5" />
-                  <span>Log In</span>
-                </Link>
-                <Link
-                  to={"/signup"}
-                  className="btn btn-ghost btn-sm"
-                >
-                  <SquarePen className="size-5" />
-                  <span>Sign Up</span>
-                </Link>
-              </>
-            )} */}
           </div>
         </div>
       </div>

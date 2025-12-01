@@ -9,16 +9,14 @@ const NoteDetailPage = () => {
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const { user, isLoading: authLoading } = useAuthContext(); // Get authLoading
+  const { user, isLoading: authLoading } = useAuthContext();
 
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
-    // Wait for auth check to complete
     if (authLoading) return;
 
-    // Only redirect if auth check is complete and no user
     if (!user) {
       navigate("/");
       return;
@@ -34,10 +32,7 @@ const NoteDetailPage = () => {
         setNote(res.data);
       } catch (error) {
         console.log("Error fetching note", error);
-        if (error.response?.status === 401 || error.response?.status === 403) {
-          toast.error("Unauthorized to view this note");
-          navigate("/");
-        } else if (error.response?.status === 404) {
+        if (error.response?.status === 404) {
           toast.error("Note not found");
           navigate("/");
         } else {
@@ -51,7 +46,6 @@ const NoteDetailPage = () => {
     fetchNote();
   }, [id, user, navigate, authLoading]);
 
-  // Show loading while checking auth OR fetching note
   if (authLoading || (user && loading)) {
     return (
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
@@ -60,7 +54,6 @@ const NoteDetailPage = () => {
     );
   }
 
-  // Don't render anything if no user after auth check
   if (!user) {
     return null;
   }
