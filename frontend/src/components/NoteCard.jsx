@@ -21,8 +21,6 @@ function NoteCard({ note, setNotes }) {
       setNotes((prev) => prev.filter((note) => note._id !== id));
       toast.success("Note deleted");
     } catch (error) {
-      console.log("Error in handleDelete", error);
-      
       if (error.response?.status === 401 || error.response?.status === 403) {
         toast.error("Unauthorized to delete this note");
         setNotes((prev) => prev.filter((note) => note._id !== id));
