@@ -1,6 +1,7 @@
 # MERN stack Note app
 
-### *Check out the live app [here!](https://mern-notes.azurewebsites.net/)*
+### *Check out the live app [here!](https://mern-notes.azurewebsites.net/)* 
+(server might spin down due to inactivity, please wait a minute after the first request)
 
 ## Overview
 
